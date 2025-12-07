@@ -1,18 +1,19 @@
 from fastmcp import FastMCP
+from ddgs import DDGS
 
-mcp = FastMCP("My MCP server")
-
-
-@mcp.tool
-def greet(name: str) -> str:
-    """Greets the user and asks a friendly question"""
-    return f"Hello {name}! how can I help you?"
+mcp = FastMCP("MCP with websearch")
 
 
 @mcp.tool
-def add(a: int, b: int) -> int:
-    """Adds two integer numbers together."""
-    return a + b
+def websearch(search_query: str, max_results: int = 5) -> list[dict]:
+    """Searches the web for relevant text information and returns a list as dictionary"""
+    web_results = DDGS().text(
+        query=search_query,
+        safesearch="moderate",
+        backend="auto",
+        max_results=max_results,
+    )
+    return web_results
 
 
 if __name__ == "__main__":
